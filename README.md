@@ -141,3 +141,19 @@ git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -
 # Replace the .htaccess password with the env var.
 git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -0 perl -p -i -e "s#(htaccess_pass.*$)#htaccess_pass: process.env.WP_HTACCESS_PASS,#g"' -- --all
 ```
+
+## Step 6: Force push to the remote branch
+
+> **HUGE FLASHING NEON WARNING:** Rewriting history is a big deal, so if you’re not the only one working on this repository, let your team know this is about to happen _before_ you do it. Everyone working on this codebase will need to pull a fresh copy of the commit history from `master` after it’s rewritten.
+
+Once history has been rewritten, you need to push the new history up to GitHub. GitHub will not like this, because rewriting history is generally frowned upon. However, it’s the only way to get rid of those passwords and other sensitive details, so we have no choice but to be rebels and do it anyways. 😈
+
+To finalize the rewrite and change history on GitHub, force push your branch:
+
+```
+git push origin master --force
+```
+
+Once this is done, your history will be rewritten and the evidence will be destroyed.
+
+**Remember to change your passwords and tokens to something different than what was committed,** and you’re now no longer at risk of bad people doing bad things with your sensitive data!
