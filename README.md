@@ -36,6 +36,8 @@ WP_CLIENT_ID=12345
 WP_CLIENT_SECRET=mysupersecrettokenthatshouldnotbepublic
 WP_USERNAME=myemailthatdoesnotwantspam@gmail.com
 WP_PASSWORD=Ohnothisshouldnotbecommitted!
+WP_HTACCESS_USER=secretuser
+WP_HTACCESS_PASS=secretpass
 ```
 
 ## Step 2: Read the sensitive data from the env vars
@@ -113,6 +115,8 @@ In this WordPress example, we need the following four patterns:
 - `s#(wpcom_app_clientId.*$)#wpcom_app_clientId: process.env.WP_CLIENT_ID,#g`
 - `s#(wpcom_user.*$)#wpcom_user: process.env.WP_USERNAME,#g`
 - `s#(wpcom_pass.*$)#wpcom_pass: process.env.WP_PASSWORD,#g`
+- `s#(htaccess_user.*$)#htaccess_user: process.env.WP_HTACCESS_USER,#g`
+- `s#(htaccess_pass.*$)#htaccess_pass: process.env.WP_HTACCESS_PASS,#g`
 
 The `.*$` in these patterns means, “After this text, match everything to the end of the line.”
 
@@ -125,9 +129,15 @@ git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -
 # Replace the client ID with the env var.
 git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -0 perl -p -i -e "s#(wpcom_app_clientId.*$)#wpcom_app_clientId: process.env.WP_CLIENT_ID,#g"' -- --all
 
-# Replace the username with the env var.
+# Replace the username and password with the env var.
 git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -0 perl -p -i -e "s#(wpcom_user.*$)#wpcom_user: process.env.WP_USERNAME,#g"' -- --all
 
 # Replace the password with the env var.
 git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -0 perl -p -i -e "s#(wpcom_pass.*$)#wpcom_pass: process.env.WP_PASSWORD,#g"' -- --all
+
+# Replace the .htaccess username with the env var.
+git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -0 perl -p -i -e "s#(htaccess_user.*$)#htaccess_user: process.env.WP_HTACCESS_USER,#g"' -- --all
+
+# Replace the .htaccess password with the env var.
+git filter-branch -f --tree-filter 'git ls-files -z "gatsby-config.js" | xargs -0 perl -p -i -e "s#(htaccess_pass.*$)#htaccess_pass: process.env.WP_HTACCESS_PASS,#g"' -- --all
 ```
